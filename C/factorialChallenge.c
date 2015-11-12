@@ -1,6 +1,15 @@
+// Author: Jason R. Eads <jeads442@gmail.com>
 // Problem source: http://www.cprogramming.com/challenges/factorial.html
 /*
-Here's a challenge that's a bit more mathematical in nature. Write a program that determines the number of trailing zeros at the end of X! (X factorial), where X is an arbitrary number. For instance, 5! is 120, so it has one trailing zero. (How can you handle extremely values, such as 100!?) The input format should be that the program asks the user to enter a number, minus the !. */
+
+Here's a challenge that's a bit more mathematical in nature. Write a program
+that determines the number of trailing zeros at the end of X! (X factorial),
+where X is an arbitrary number. For instance, 5! is 120, so it has one
+trailing zero. (How can you handle extremely values, such as 100!?) The input
+format should be that the program asks the user to enter a number, minus
+the !.
+
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,13 +19,12 @@ Here's a challenge that's a bit more mathematical in nature. Write a program tha
 #  define CHAR_BIT __CHAR_BIT__
 #endif
 
-
 const int INTEGER_STRING_SIZE = (sizeof(int)*CHAR_BIT-1)/3 + 3;
 
 uint64_t countTrailingZeros( uint64_t );
 uint64_t factorial( int n );
-uint32_t multiplicationIsSafe(uint64_t a, uint64_t b);
-size_t highestOneBitPosition(uint64_t a);
+uint32_t multiplicationIsSafe( uint64_t a, uint64_t b );
+size_t highestOneBitPosition( uint64_t a );
 
 int main(int argc, char *argv[])
 {
@@ -115,3 +123,6 @@ size_t highestOneBitPosition(uint64_t a)
     };
     return bits;
 }
+
+
+
