@@ -10,45 +10,55 @@ Here's a challenge that's a bit more mathematical in nature. Write a program tha
 #  define CHAR_BIT __CHAR_BIT__
 #endif
 
-// TODO: CONSIDER: Adjust for big int!
 
 const int INTEGER_STRING_SIZE = (sizeof(int)*CHAR_BIT-1)/3 + 3;
 
-unsigned long factorial( int n );
-uint32_t multiplication_is_safe(uint64_t a, uint64_t b);
+uint64_t countTrailingZeros( uint64_t );
+uint64_t factorial( int n );
+uint32_t multiplicationIsSafe(uint64_t a, uint64_t b);
 size_t highestOneBitPosition(uint64_t a);
-
 
 int main(int argc, char *argv[])
 {
-	// printf("%d\n", CHAR_BIT);
-	//return 0;
-	
-	int x;
-	printf("Enter an integer to take its factorial.\n");
-	scanf("%d", &x);
-	
-	unsigned long y = factorial(x);
-	printf("\nfinal factorial: %lu\n",  y);
-	if ( y == -1 )
+	printf("Program will output trailing zeros to the factorial of given integer.\n");
+
+	char c;
+	printf("The hard way? ( y / n ): ");
+	scanf("%c", &c);
+
+	if( c == 'n' )
 	{
-		printf("The number is too large to represent in a normal unsigned integer.\n");
-		printf("Big integer is not yet implemented.\n");
-		exit(1);
+		printf("The easy way. Counting zeros in input digit.\n");
+		int x;
+		printf("Enter a positive integer: ");
+		scanf("%d", &x);
+
+		printf("trailing zeros: %llu\n", countTrailingZeros(x)*x);
 	}
-	
+	else
+	{
+		printf("The hard way. Calculating factorial.\n");
+		int x;
+		printf("Enter a positive integer: ");
+		scanf("%d", &x);
+
+		uint64_t y = factorial(x);
+		printf("\nfinal factorial: %llu\n",  y);
+		printf("trailing zeros: %llu\n", countTrailingZeros(y));
+	}
+	return 0;
+}
+
+uint64_t countTrailingZeros( uint64_t n )
+{
 	char * numstring = malloc(INTEGER_STRING_SIZE);
 	
-	sprintf(numstring,"%lu",y);
+	sprintf(numstring,"%llu",n);
 	
 	int strLen = strlen(numstring);
 	
-	int trailingZeros = 0;
+	uint64_t trailingZeros = 0;
 	
-	/*
-	printf("strlen %d\n", strLen);
-	printf("str    %s\n", numstring);
-	*/
 	for (int i = strLen - 1; i >= 0; i--)
 	{
 		if (numstring[i] != '0')
@@ -59,22 +69,24 @@ int main(int argc, char *argv[])
 		{
 			trailingZeros += 1;
 		}
-	}
-	printf("trailing zeros: %d\n", trailingZeros);
-	
-	return 0;
+	}	
+	return trailingZeros;
 }
 
-unsigned long factorial( int n )
+// TODO: CONSIDER: Adjust for big int!
+uint64_t factorial( int n )
 {
-	unsigned long retval = 1;
-	for (unsigned long i = n; i > 0;  i--)
+	uint64_t retval = 1;
+	for (int i = n; i > 0;  i--)
 	{
-		if( multiplication_is_safe(retval, i) ) {
-			retval *= i;
-			printf("factorial: %lu\n",  retval);
+		if( multiplicationIsSafe(retval, n) ) {
+			retval *= n;
+			printf("factorial iteration %d: %llu\n",  n-i, retval);
 		}
 		else {
+			printf("Number has exceeded unsigned long long integer max: %llu\n", UINT64_MAX);
+			printf("Big integer is not yet implemented.\n");
+			exit(1);
 			return -1;
 		}
 	}
@@ -83,11 +95,11 @@ unsigned long factorial( int n )
 
 // Function by 'Head Geek'
 // Source: http://stackoverflow.com/questions/199333/how-to-detect-integer-overflow-in-c-c
-// Modified for unsigned long
-uint32_t multiplication_is_safe(uint64_t a, uint64_t b)
+// Modified for unsigned long, naming conventions
+uint32_t multiplicationIsSafe(uint64_t a, uint64_t b)
 {
     size_t a_bits=highestOneBitPosition(a), b_bits=highestOneBitPosition(b);
-    return (a_bits+b_bits<=32);
+    return (a_bits+b_bits<=64);
 }
 
 // Function by 'Head Geek'
